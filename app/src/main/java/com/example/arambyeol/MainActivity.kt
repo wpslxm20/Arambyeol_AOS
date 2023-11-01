@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.sp
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
         setContent {
             MainView()
         }
@@ -32,13 +31,9 @@ class MainActivity : AppCompatActivity() {
                 .fillMaxHeight()
         ) {
             TitleView.main()
-
             Box(modifier = Modifier.height(10.dp))
-
             BtnDateView.main()
+            ContentView.main()
         }
     }
-
-
-
 }
