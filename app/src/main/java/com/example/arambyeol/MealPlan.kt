@@ -13,6 +13,6 @@ data class DayPlan(
 )
 
 data class Course(
-    val course: String,
+    val courseName: String,
     val menu: List<String>
 )

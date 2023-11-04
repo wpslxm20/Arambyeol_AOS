@@ -5,7 +5,7 @@ object DummyData {
         today = DayPlan(
             morning = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "쌀밥 / 누룽지",
                         "수제비국",
@@ -17,7 +17,7 @@ object DummyData {
                     )
                 ),
                 Course(
-                    course = "테이크아웃",
+                    courseName = "테이크아웃",
                     menu = listOf(
                         "미니꿀호떡",
                         "견과류",
@@ -27,7 +27,7 @@ object DummyData {
             ),
             lunch = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "쌀밥",
                         "소고기무국",
@@ -41,7 +41,7 @@ object DummyData {
             ),
             dinner = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "참치김치덮밥",
                         "파송송계란탕",
@@ -56,7 +56,7 @@ object DummyData {
         tomorrow = DayPlan(
             morning = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "쌀밥 / 누룽지",
                         "사골우거지탕",
@@ -70,7 +70,7 @@ object DummyData {
             ),
             lunch = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "짜장라이스",
                         "우동장국",
@@ -83,7 +83,7 @@ object DummyData {
             ),
             dinner = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "쌀밥",
                         "돼지김치찌개",
@@ -99,7 +99,7 @@ object DummyData {
         theDayAfterTomorrow = DayPlan(
             morning = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "쌀밥 / 누룽지",
                         "오징어무국",
@@ -113,7 +113,7 @@ object DummyData {
             ),
             lunch = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "쌀밥",
                         "시래기국",
@@ -127,7 +127,7 @@ object DummyData {
             ),
             dinner = listOf(
                 Course(
-                    course = "A코스/한식",
+                    courseName = "A코스/한식",
                     menu = listOf(
                         "쌀밥",
                         "순두부찌개",

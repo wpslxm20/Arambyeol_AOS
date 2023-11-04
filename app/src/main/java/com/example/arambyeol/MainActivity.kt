@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             TitleView.main()
             Box(modifier = Modifier.height(10.dp))
             BtnDateView.main()
+            Box(modifier = Modifier.height(30.dp))
             ContentView.main()
         }
     }
