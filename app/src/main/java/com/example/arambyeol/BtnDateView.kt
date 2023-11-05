@@ -52,7 +52,10 @@ private fun RadioGroup() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         dateList.forEach { text ->
-            RadioBtn(modifier =Modifier.weight(1f), text = text, selectedOption = selectedOption, onOptionSelected = onOptionSelected)
+            RadioBtn(
+                modifier =Modifier.weight(1f),
+                text = text, selectedOption = selectedOption,
+                onOptionSelected = onOptionSelected)
         }
     }
 
