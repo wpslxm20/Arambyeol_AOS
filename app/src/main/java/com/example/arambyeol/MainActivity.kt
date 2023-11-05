@@ -51,12 +51,16 @@ class MainActivity : AppCompatActivity() {
                 Box(modifier = Modifier.height(30.dp))
                 ContentView.main()
                 Divider(
-                    modifier = Modifier.padding(top = 50.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+                    modifier = Modifier.padding(top = 50.dp, bottom = 50.dp, start = 20.dp, end = 20.dp),
+                    color = colorResource(id = R.color.bright_gray)
+                )
+                TimeView.main()
+                Divider(
+                    modifier = Modifier.padding(top = 30.dp, bottom = 30.dp, start = 20.dp, end = 20.dp),
                     color = colorResource(id = R.color.bright_gray)
                 )
                 BottomView.main()
-                Box(modifier = Modifier.height(30.dp))
-                TimeView.main()
+                Box(modifier = Modifier.height(10.dp))
             }
             BannerView.main()
         }
