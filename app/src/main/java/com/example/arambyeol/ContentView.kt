@@ -1,5 +1,7 @@
 package com.example.arambyeol
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -13,11 +15,13 @@ object ContentView {
     private val dayPlans_ = DummyData.dummyMealPlan.today
     private val dayPlans = mutableListOf(dayPlans_.morning, dayPlans_.lunch, dayPlans_.dinner)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun main() {
         mealPlanView()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     private fun mealPlanView() {
         BoxWithConstraints {
