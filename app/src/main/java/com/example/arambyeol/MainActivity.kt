@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,16 +38,28 @@ class MainActivity : AppCompatActivity() {
                 .fillMaxWidth()
                 .fillMaxHeight()
         ) {
-            TitleView.main()
-            Box(modifier = Modifier.height(10.dp))
-            BtnDateView.main()
-            Box(modifier = Modifier.height(30.dp))
-            ContentView.main()
-            Divider(
-                modifier = Modifier.padding(top = 50.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
-                color = colorResource(id = R.color.bright_gray)
-            )
-            BottomView.main()
+            val scrollState = rememberScrollState()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(scrollState)
+                    .weight(1f)
+            ) {
+                TitleView.main()
+                Box(modifier = Modifier.height(10.dp))
+                BtnDateView.main()
+                Box(modifier = Modifier.height(30.dp))
+                ContentView.main()
+                Divider(
+                    modifier = Modifier.padding(top = 50.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+                    color = colorResource(id = R.color.bright_gray)
+                )
+                BottomView.main()
+                Box(modifier = Modifier.height(30.dp))
+                TimeView.main()
+            }
+            BannerView.main()
         }
+
     }
 }

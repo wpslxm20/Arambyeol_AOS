@@ -27,13 +27,11 @@ object BottomView {
     private const val EMAILADDR = "gogosusumlnmln@gmail.com"
     private const val FONT_SIZE = 11
 
-
     @Composable
     fun main() {
         Column {
             explanationText()
             Box(modifier = Modifier.height(10.dp))
-            banner()
         }
 
     }
@@ -93,15 +91,4 @@ object BottomView {
         )
     }
 
-    @Composable
-    private fun banner() {
-        Column(
-            modifier = Modifier
-                .width(320.dp)
-                .height(50.dp)
-                .background(color = Color.Blue)
-        ) {
-
-        }
-    }
 }
