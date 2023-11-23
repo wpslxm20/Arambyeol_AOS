@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -17,13 +16,12 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
+import com.example.arambyeol.data.Course
 
 object DayPlanView {
 
@@ -38,7 +36,7 @@ object DayPlanView {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun dayPlanView(mealTime: String, courses: List<Course>,  modifier: Modifier) {
+    private fun dayPlanView(mealTime: String, courses: List<Course>, modifier: Modifier) {
         Column(
             modifier = modifier
                 .fillMaxWidth(),
@@ -144,7 +142,7 @@ object DayPlanView {
                 .padding(bottom = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            courseNameText(courseName = course.courseName)
+            courseNameText(courseName = course.course)
             courseMenuLazy(menus = course.menu)
         }
     }

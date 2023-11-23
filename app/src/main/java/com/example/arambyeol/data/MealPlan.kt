@@ -1,4 +1,4 @@
-package com.example.arambyeol
+package com.example.arambyeol.data
 
 data class MealPlan(
     val today: DayPlan,
@@ -13,6 +13,6 @@ data class DayPlan(
 )
 
 data class Course(
-    val courseName: String,
+    val course: String,
     val menu: List<String>
 )

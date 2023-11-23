@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 
 object BottomView {
     private const val FIRST_EXPLANATION =
-        "매주 월요일 1시에 식단표가 업데이트 됩니다!\n상단 오른쪽 아람별 아이콘을 누르면 아람관 운영시간을 확인할 수 있습니다."
+        "매주 월요일 1시에 식단표가 업데이트 됩니다!"
     private const val MIDDLE_EXPLANATION = "앱 아람별 문의사항은 "
     private const val FINAL_EXPLANATION = " 로 보내주세요 :)"
     private const val EMAILADDR = "gogosusumlnmln@gmail.com"

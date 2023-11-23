@@ -1,49 +1,37 @@
 package com.example.arambyeol
 
-import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.arambyeol.BtnDateView.FONT_SIZE
-
+import com.example.arambyeol.data.DateEnum
 
 
 object BtnDateView {
-
     const val FONT_SIZE = 15
-
     @Composable
-    fun main() {
-        RadioGroup()
+    fun main(selectedDay: MutableState<DateEnum>) {
+        RadioGroup(selectedDay)
     }
 }
 
 @Composable
-private fun RadioGroup() {
+private fun RadioGroup(selectedDay: MutableState<DateEnum>) {
     val dateList = listOf(
-        stringResource(id = R.string.today),
-        stringResource(id = R.string.tomorrow),
-        stringResource(id = R.string.day_after_tomorrow)
+        DateEnum.TODAY,
+        DateEnum.TOMORROW,
+        DateEnum.AFTER_TOMORROW
     )
-
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf( dateList[0] ) }
 
     Row(
         modifier = Modifier
@@ -53,22 +41,27 @@ private fun RadioGroup() {
     ) {
         dateList.forEach { text ->
             RadioBtn(
-                modifier =Modifier.weight(1f),
-                text = text, selectedOption = selectedOption,
-                onOptionSelected = onOptionSelected)
+                modifier = Modifier.weight(1f),
+                text = text.date, selectedOption = selectedDay.value,
+                onOptionSelected = { selectedDay.value = it }
+            )
         }
     }
-
 }
 
 @Composable
-private fun RadioBtn(modifier: Modifier, text: String, selectedOption: String, onOptionSelected: (text: String) -> Unit) {
+private fun RadioBtn(
+    modifier: Modifier,
+    text: String,
+    selectedOption: DateEnum,
+    onOptionSelected: (DateEnum) -> Unit
+) {
     Column(
         modifier = modifier
             .selectable(
-                selected = (text == selectedOption),
+                selected = (text == selectedOption.date),
                 onClick = {
-                    onOptionSelected(text)
+                    onOptionSelected(DateEnum.values().first() { it.date == text })
                 },
                 role = Role.RadioButton
             ),
@@ -82,7 +75,7 @@ private fun RadioBtn(modifier: Modifier, text: String, selectedOption: String, o
             fontSize = FONT_SIZE.sp,
         )
 
-        if (selectedOption == text) {
+        if (selectedOption.date == text) {
             Box(
                 modifier = Modifier
                     .width(40.dp)
