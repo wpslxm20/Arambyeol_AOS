@@ -12,20 +12,23 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import com.example.arambyeol.controller.MealPlanFetcher
 import com.example.arambyeol.data.DateEnum
 import com.example.arambyeol.data.MealPlan
 import com.example.arambyeol.service.RetrofitObj
+import com.example.arambyeol.view.*
 import kotlinx.coroutines.*
 
 
 class MainActivity : AppCompatActivity() {
+    private val mealPlanFetcher = MealPlanFetcher()
+
     @SuppressLint("CoroutineCreationDuringComposition")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             val menu = remember { mutableStateOf<MealPlan?>(null) }
 
             lifecycleScope.launch {
-                menu.value = getMenu()
+                menu.value = mealPlanFetcher.fetchMealPlanData()
             }
 
             MainView(menu.value)
@@ -77,28 +80,5 @@ class MainActivity : AppCompatActivity() {
             BannerView.main()
         }
 
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun getMenu(): MealPlan? {
-        var menu: MealPlan? = null
-        withContext(Dispatchers.IO) {
-            try {
-                val response = RetrofitObj.retrofitService?.getMenu()?.execute()
-                if (response != null) {
-                    if (response.isSuccessful) {
-                        menu = response.body()
-                        Log.d("getMenu", menu.toString())
-                    } else {
-                        Log.d("getMenu", "response is null")
-                    }
-                } else {
-                    Log.d("getMenu", "response is null")
-                }
-            } catch (e: Exception) {
-                Log.e("getMenu", e.message ?: "Unknown error")
-            }
-        }
-        return menu
     }
 }

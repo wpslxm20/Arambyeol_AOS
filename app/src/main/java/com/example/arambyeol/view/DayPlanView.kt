@@ -1,4 +1,4 @@
-package com.example.arambyeol
+package com.example.arambyeol.view
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.arambyeol.R
 import com.example.arambyeol.data.Course
 
 object DayPlanView {
@@ -127,7 +128,7 @@ object DayPlanView {
             modifier = Modifier
                 .padding(start = 20.dp, top = 30.dp, end = 20.dp, bottom = 20.dp)
         ) {
-            items(courses){course ->
+            items(courses) { course ->
                 courseView(course = course)
             }
         }

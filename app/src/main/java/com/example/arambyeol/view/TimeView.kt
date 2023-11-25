@@ -1,4 +1,4 @@
-package com.example.arambyeol
+package com.example.arambyeol.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text

@@ -1,4 +1,4 @@
-package com.example.arambyeol
+package com.example.arambyeol.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -10,6 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.arambyeol.R
 
 object TitleView {
     const val TITLE_FONT_SIZE = 17
