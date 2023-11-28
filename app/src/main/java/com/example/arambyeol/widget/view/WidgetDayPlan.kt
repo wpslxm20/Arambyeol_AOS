@@ -25,7 +25,7 @@ import com.example.arambyeol.widget.view.WidgetItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class Widget4x4(): GlanceAppWidget() {
+class WidgetDayPlan(): GlanceAppWidget() {
 
     private val widgetItem = WidgetItem()
     private val widgetController = WidgetController()
@@ -130,7 +130,7 @@ class Widget4x4(): GlanceAppWidget() {
 
 }
 
-class Widget4x4Receiver : GlanceAppWidgetReceiver() {
+class WidgetDayPlanReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget
-        get() = Widget4x4()
+        get() = WidgetDayPlan()
 }

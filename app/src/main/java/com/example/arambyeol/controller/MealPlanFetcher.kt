@@ -15,8 +15,10 @@ class MealPlanFetcher {
                 val response = RetrofitObj.retrofitService?.getMenu()?.execute()
                 if (response != null) {
                     if (response.isSuccessful) {
+                        Log.d("getMenu", response.body().toString())
                         response.body()
-                    } else {
+                    }
+                    else {
                         Log.d("getMenu", "response is not successful")
                         null
                     }

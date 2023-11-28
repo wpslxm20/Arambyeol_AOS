@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.example.arambyeol.controller.MealPlanFetcher
+import com.example.arambyeol.data.Course
 import com.example.arambyeol.data.DayPlan
 import com.example.arambyeol.data.MealPlan
 import com.example.arambyeol.data.MealTimeEnum
@@ -28,19 +29,19 @@ class WidgetController {
 
         val lunchEndTime = MealTimeEnum.WEEKDAY_LUNCH.endTime
         val dinnerEndTime = MealTimeEnum.WEEKDAY_DINNER.endTime
-        val tomorrowMorningTime = LocalTime.of(0, 0)
+        val midnightTime = LocalTime.of(23, 59)
         val morningEndTime = MealTimeEnum.WEEKDAY_MORNING.endTime
 
         if (currentTime.isAfter(morningEndTime) && currentTime.isBefore(lunchEndTime)) {
             return "점심"
         } else if (currentTime.isAfter(lunchEndTime) && currentTime.isBefore(dinnerEndTime)) {
             return "저녁"
-        } else if (currentTime.isAfter(dinnerEndTime) && currentTime.isBefore(tomorrowMorningTime)) {
+        } else if (currentTime.isAfter(dinnerEndTime) && currentTime.isBefore(midnightTime)) {
             return "내일 아침"
-        } else if (currentTime.isAfter(tomorrowMorningTime) && currentTime.isBefore(morningEndTime)) {
+        } else if (currentTime.isAfter(midnightTime) && currentTime.isBefore(morningEndTime)) {
             return "아침"
         }
-
+        Log.d("getMealTime", "null")
         return "아침"
     }
 
@@ -49,7 +50,7 @@ class WidgetController {
     fun getMealDate(): String {
         val currentTime = LocalTime.now()
         val dinnerEndTime = MealTimeEnum.WEEKDAY_DINNER.endTime
-        val midnightTime = LocalTime.of(0, 0)
+        val midnightTime = LocalTime.of(23, 59)
 
         if (currentTime.isAfter(dinnerEndTime) && currentTime.isBefore(midnightTime))
             return "내일"
@@ -61,14 +62,31 @@ class WidgetController {
         val mealPlanFetcher = MealPlanFetcher()
         val mealPlan = mealPlanFetcher.fetchMealPlanData()
 
-        if (mealPlan != null) {
-            return if (mealDate.contains("내일"))
+        return if (mealPlan != null) {
+            if (mealDate.contains("내일"))
                 mealPlan.tomorrow
             else
                 mealPlan.today
+        } else {
+            null
         }
-        else {
-            return null
-        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getCources(mealTime: String): List<Course>? {
+        val mealPlanFetcher = MealPlanFetcher()
+        val mealPlan = mealPlanFetcher.fetchMealPlanData()
+
+        return if (mealPlan != null) {
+            if (mealTime.contains("아침"))
+                mealPlan.today.morning
+            else if (mealTime.contains("점심"))
+                mealPlan.today.lunch
+            else if (mealTime.contains("저녁"))
+                mealPlan.today.dinner
+            else
+                mealPlan.tomorrow.morning
+        } else
+            null
     }
 }

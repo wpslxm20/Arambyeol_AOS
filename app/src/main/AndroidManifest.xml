@@ -24,13 +24,22 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".widget.Widget4x4Receiver" android:exported="true">
+        <receiver android:name=".widget.WidgetDayPlanReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget4x4_info" />
+                android:resource="@xml/widget_day_plan_info" />
+        </receiver>
+
+        <receiver android:name=".widget.view.WidgetCoursesReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_courses_info" />
         </receiver>
     </application>
 
