@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -144,7 +145,7 @@ object DayPlanView {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             courseNameText(courseName = course.course)
-            courseMenuLazy(menus = course.menu)
+            course.menu?.let { courseMenuLazy(menus = it) }
         }
     }
 
@@ -155,7 +156,8 @@ object DayPlanView {
             color = colorResource(id = R.color.dark_gray),
             fontSize = FONT_SIZE.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 20.dp)
+            modifier = Modifier.padding(bottom = 20.dp),
+            textAlign = TextAlign.Center
         )
     }
 

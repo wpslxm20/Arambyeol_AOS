@@ -19,7 +19,12 @@ object RetrofitObj {
         }
 
         client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Connection", "close")
+                    .build()
+                chain.proceed(request)
+            }
             .build()
 
         createRetrofitApi()

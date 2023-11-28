@@ -14,5 +14,5 @@ data class DayPlan(
 
 data class Course(
     val course: String,
-    val menu: List<String>
+    val menu: List<String>?
 )

@@ -37,7 +37,7 @@ object TitleView {
                     .weight(1f)
                     .wrapContentWidth(Alignment.End)
             ) {
-                val imagePainter = painterResource(id = R.drawable.ic_btn_show_time)
+                val imagePainter = painterResource(id = R.drawable.ic_logo)
                 Icon(
                     painter = imagePainter,
                     tint = Color.Unspecified, // 로고 색 표현

@@ -30,11 +30,17 @@ object ContentView {
         if (dayPlansList != null) {
             mealPlanView(dayPlansList)
         }
+        else {
+            val nullCourse = Course("업데이트 예정", null)
+            val mealPlansList = listOf(nullCourse)
+            val dayPlansList = listOf(mealPlansList, mealPlansList, mealPlansList)
+            mealPlanView(dayPlansList = dayPlansList)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun mealPlanView(dayPlansList: MutableList<List<Course>>) {
+    private fun mealPlanView(dayPlansList: List<List<Course>>) {
 
         BoxWithConstraints {
             val screenWidth = this.maxWidth
@@ -42,6 +48,7 @@ object ContentView {
 
             LazyRow {
                 itemsIndexed(dayPlansList) { index, dayPlan ->
+
                     DayPlanView.main(
                         mealTime = mealTimes[index],
                         courses = dayPlan,

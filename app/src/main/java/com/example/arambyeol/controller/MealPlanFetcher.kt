@@ -9,26 +9,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MealPlanFetcher {
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun fetchMealPlanData(): MealPlan? {
-        var menu: MealPlan? = null
-        withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             try {
                 val response = RetrofitObj.retrofitService?.getMenu()?.execute()
                 if (response != null) {
                     if (response.isSuccessful) {
-                        menu = response.body()
-                        Log.d("getMenu", menu.toString())
+                        response.body()
                     } else {
-                        Log.d("getMenu", "response is null")
+                        Log.d("getMenu", "response is not successful")
+                        null
                     }
                 } else {
                     Log.d("getMenu", "response is null")
+                    null
                 }
             } catch (e: Exception) {
                 Log.e("getMenu", e.message ?: "Unknown error")
+                null
             }
         }
-        return menu
     }
 }
