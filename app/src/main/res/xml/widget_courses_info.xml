@@ -3,6 +3,6 @@
     android:previewImage="@drawable/ic_logo"
     android:description="@string/app_name"
     android:minWidth="150dp"
-    android:minHeight="150dp"
+    android:minHeight="50dp"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />
