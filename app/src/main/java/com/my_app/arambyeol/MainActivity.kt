@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.MobileAds
 import com.my_app.arambyeol.controller.MealPlanFetcher
 import com.my_app.arambyeol.data.DateEnum
 import com.my_app.arambyeol.data.MealPlan
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MobileAds.initialize(this)
         setContent {
             val menu = remember { mutableStateOf<MealPlan?>(null) }
 

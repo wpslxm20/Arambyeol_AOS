@@ -67,7 +67,7 @@ object DayPlanView {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(450.dp)
+                .height(400.dp)
                 .padding(horizontal = 20.dp)
                 .drawColoredShadow(
                     color = colorResource(id = R.color.bright_yellow),
