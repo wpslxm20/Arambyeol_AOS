@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.arambyeol'
+    namespace 'com.my_app.arambyeol'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.arambyeol"
+        applicationId "com.my_app.arambyeol"
         minSdk 24
         targetSdk 33
         versionCode 1
