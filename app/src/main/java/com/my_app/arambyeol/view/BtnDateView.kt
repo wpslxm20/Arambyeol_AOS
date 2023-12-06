@@ -62,7 +62,7 @@ private fun RadioBtn(
             .selectable(
                 selected = (text == selectedOption.date),
                 onClick = {
-                    onOptionSelected(DateEnum.values().first() { it.date == text })
+                    onOptionSelected(DateEnum.values().first { it.date == text })
                 },
                 role = Role.RadioButton
             ),

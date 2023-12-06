@@ -68,10 +68,9 @@ class WidgetDayPlan(): GlanceAppWidget() {
             mutableStateOf<DayPlan?>(null)
         }
         LaunchedEffect(Unit) {
-            while (dayPlan == null) {
-                dayPlan = withContext(Dispatchers.Main.immediate) {
-                    widgetController.getDayPlan(mealDate)
-                }
+            for (i in 1..10) {
+                dayPlan = widgetController.getDayPlan(mealDate)
+                if (dayPlan != null) break
             }
         }
         Log.d("widget_getDayPlan", dayPlan.toString())

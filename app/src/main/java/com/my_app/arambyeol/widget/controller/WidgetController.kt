@@ -26,9 +26,11 @@ class WidgetController {
         val currentTime = LocalTime.now()
 
         val lunchEndTime = MealTimeEnum.WEEKDAY_LUNCH.endTime
-        val dinnerEndTime = MealTimeEnum.WEEKDAY_DINNER.endTime
+//        val dinnerEndTime = MealTimeEnum.WEEKDAY_DINNER.endTime
+        val dinnerEndTime = LocalTime.of(16, 13)
         val midnightTime = LocalTime.of(23, 59)
         val morningEndTime = MealTimeEnum.WEEKDAY_MORNING.endTime
+//        val morningEndTime = LocalTime.of(1, 2)
 
         if (currentTime.isAfter(morningEndTime) && currentTime.isBefore(lunchEndTime)) {
             return LUNCH

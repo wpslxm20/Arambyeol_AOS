@@ -26,7 +26,7 @@ object ContentView {
             DateEnum.TOMORROW -> menu?.tomorrow
             DateEnum.AFTER_TOMORROW -> menu?.theDayAfterTomorrow
         }
-        val dayPlansList = dayPlans?.let { mutableListOf(it.morning, dayPlans.lunch, dayPlans.dinner) }
+        val dayPlansList = dayPlans?.let { listOf(it.morning, dayPlans.lunch, dayPlans.dinner) }
         if (dayPlansList != null) {
             mealPlanView(dayPlansList)
         }

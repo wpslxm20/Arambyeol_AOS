@@ -36,6 +36,6 @@ object RetrofitObj {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ArambyeolInterface::class.java) //자바코드의 class 함수 사용 방법
+            .create(ArambyeolInterface::class.java)
     }
 }
