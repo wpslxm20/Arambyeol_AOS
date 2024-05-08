@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 권한 선언 -->
-
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/> <!-- Alarm Manager -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -43,6 +44,13 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_courses_info" />
         </receiver>
+        <!--자정알람-->
+        <receiver android:name=".controller.MidnightAlarmReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.my_app.arambyeol.UPDATE_MEAL_PLAN"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 

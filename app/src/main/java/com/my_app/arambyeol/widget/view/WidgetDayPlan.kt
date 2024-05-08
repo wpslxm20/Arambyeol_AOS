@@ -28,12 +28,13 @@ import kotlinx.coroutines.withContext
 class WidgetDayPlan(): GlanceAppWidget() {
 
     private val widgetItem = WidgetItem()
-    private val widgetController = WidgetController()
+    private lateinit var widgetController: WidgetController
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        widgetController = WidgetController(context)
         provideContent {
-            MyContent()
+            MyContent(context)
         }
     }
 
@@ -41,7 +42,7 @@ class WidgetDayPlan(): GlanceAppWidget() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun MyContent() {
+    private fun MyContent(context: Context) {
         Column (
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -56,22 +57,21 @@ class WidgetDayPlan(): GlanceAppWidget() {
                 val mealDate= widgetController.getMealDate()
                 widgetItem.DateView(currentDate, mealDate)
 
-                DayPlanView(mealDate)
+                DayPlanView(context, mealDate)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun DayPlanView(mealDate: String) {
+    private fun DayPlanView(context: Context, mealDate: String) {
+//        widgetController = WidgetController(context)
         var dayPlan by remember {
-            mutableStateOf<DayPlan?>(null)
+            mutableStateOf<List<List<Course>>>(listOf())
         }
+
         LaunchedEffect(Unit) {
-            for (i in 1..10) {
-                dayPlan = widgetController.getDayPlan(mealDate)
-                if (dayPlan != null) break
-            }
+            dayPlan = widgetController.getDayPlan(mealDate)
         }
         Log.d("widget_getDayPlan", dayPlan.toString())
         Column(
@@ -81,11 +81,11 @@ class WidgetDayPlan(): GlanceAppWidget() {
         ) {
             dayPlan?.let {
                 val modifier = GlanceModifier.defaultWeight()
-                CoursesView(modifier, mealTime = "아침", courses = it.morning)
+                CoursesView(modifier, mealTime = "아침", courses = it[0])
                 line()
-                CoursesView(modifier, mealTime = "점심", courses = it.lunch)
+                CoursesView(modifier, mealTime = "점심", courses = it[1])
                 line()
-                CoursesView(modifier, mealTime = "저녁", courses = it.dinner)
+                CoursesView(modifier, mealTime = "저녁", courses = it[2])
             }
         }
     }

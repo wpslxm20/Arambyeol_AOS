@@ -10,4 +10,5 @@ object ConstantObj {
     const val ARAM_SCHEDULE = "아람 시간표"
     const val WEEKDAY = "평일"
     const val WEEKEND = "주말"
+    const val TODAY = "오늘"
 }

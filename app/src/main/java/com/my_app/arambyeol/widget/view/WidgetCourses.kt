@@ -8,7 +8,9 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.runtime.*
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -26,17 +28,19 @@ import com.my_app.arambyeol.data.Course
 import com.my_app.arambyeol.widget.controller.WidgetController
 import java.util.*
 import com.my_app.arambyeol.R
+import com.my_app.arambyeol.widget.WidgetDayPlan
 
 
 class WidgetCourses : GlanceAppWidget() {
 
     private val widgetItem = WidgetItem()
-    private val widgetController = WidgetController()
+    private lateinit var widgetController: WidgetController
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val currentDate = widgetController.getCurrentDate()
         val mealTime = widgetController.getMealTime()
+        widgetController = WidgetController(context)
 
         provideContent {
             Column(
@@ -51,7 +55,7 @@ class WidgetCourses : GlanceAppWidget() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     widgetItem.DateView(currentDate = currentDate, mealTime = mealTime)
-                    CoursesView(mealTime = mealTime)
+                    CoursesView(context, mealTime = mealTime)
                 }
             }
         }
@@ -61,7 +65,8 @@ class WidgetCourses : GlanceAppWidget() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun CoursesView(mealTime: String) {
+    private fun CoursesView(context: Context,mealTime: String) {
+//        widgetController = WidgetController(context)
         var courses by remember(mealTime) {
             mutableStateOf<List<Course>?>(null)
         }
@@ -78,61 +83,7 @@ class WidgetCourses : GlanceAppWidget() {
         }
     }
 }
-
 class WidgetCoursesReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget
         get() = WidgetCourses()
-
-    private val TAG = "WidgetCoursesReceiver"
-    private var alarmManager: AlarmManager? = null
-    private var pIntent: PendingIntent? = null
-
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-
-        val action: String? = intent.action
-
-        // 위젯 업데이트 인텐트를 수신했을 때
-        if (action.equals("android.appwidget.action.APPWIDGET_UPDATE"))
-        {
-            Log.w(TAG, "android.appwidget.action.APPWIDGET_UPDATE")
-            removePreviousAlarm()
-
-            val midnightTime = Calendar.getInstance().apply {
-                timeInMillis = System.currentTimeMillis()
-                set(Calendar.HOUR_OF_DAY, 16)
-                set(Calendar.MINUTE, 14)
-            }
-            pIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-            alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
-
-            if (pIntent != null) {
-                alarmManager?.set(AlarmManager.RTC, midnightTime.timeInMillis, pIntent!!)
-            }
-
-        }
-        // 위젯 제거 인텐트를 수신했을 때
-        else if (action.equals("android.appwidget.action.APPWIDGET_DISABLED")) {
-            Log.w(TAG, "android.appwidget.action.APPWIDGET_DISABLED")
-            removePreviousAlarm();
-        }
-
-    }
-
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
-    }
-
-    fun removePreviousAlarm()
-    {
-        if (alarmManager != null && pIntent != null)
-        {
-            pIntent!!.cancel()
-            alarmManager!!.cancel(pIntent!!)
-        }
-    }
 }
