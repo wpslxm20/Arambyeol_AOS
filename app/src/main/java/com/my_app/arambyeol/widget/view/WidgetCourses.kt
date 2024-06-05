@@ -1,16 +1,9 @@
 package com.my_app.arambyeol.widget.view
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
-import android.widget.RemoteViews
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.runtime.*
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -28,19 +21,29 @@ import com.my_app.arambyeol.data.Course
 import com.my_app.arambyeol.widget.controller.WidgetController
 import java.util.*
 import com.my_app.arambyeol.R
-import com.my_app.arambyeol.widget.WidgetDayPlan
+import com.my_app.arambyeol.data.ConstantObj
 
 
 class WidgetCourses : GlanceAppWidget() {
 
     private val widgetItem = WidgetItem()
-    private lateinit var widgetController: WidgetController
+    private val widgetController = WidgetController()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val dateTime = widgetController.getMealTime()
+
+        // 시간 날짜 조정
+        var day: String = if (ConstantObj.TOMORROW in dateTime) ConstantObj.TOMORROW
+        else ConstantObj.TODAY
+        var time: String = dateTime.substring(dateTime.length - 2)
+
+
+        val courses = widgetController.getCourses(context, day, time)
+        Log.d("widget_update_getData", courses.toString())
+
         val currentDate = widgetController.getCurrentDate()
         val mealTime = widgetController.getMealTime()
-        widgetController = WidgetController(context)
 
         provideContent {
             Column(
@@ -55,7 +58,7 @@ class WidgetCourses : GlanceAppWidget() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     widgetItem.DateView(currentDate = currentDate, mealTime = mealTime)
-                    CoursesView(context, mealTime = mealTime)
+                    CoursesView(context, courses)
                 }
             }
         }
@@ -65,18 +68,15 @@ class WidgetCourses : GlanceAppWidget() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun CoursesView(context: Context,mealTime: String) {
-//        widgetController = WidgetController(context)
-        var courses by remember(mealTime) {
-            mutableStateOf<List<Course>?>(null)
-        }
-        LaunchedEffect(Unit) {
-            for (i in 1..10) {
-                courses = widgetController.getCources(mealTime)
-                if (courses != null) break
-            }
-        }
-        Log.d("widget_getCources", courses.toString())
+    private fun CoursesView(context: Context, courses: List<Course>) {
+////        widgetController = WidgetController(context)
+//        var courses by remember(mealTime) {
+//            mutableStateOf<List<Course>?>(null)
+//        }
+//        LaunchedEffect(Unit) {
+//            courses = widgetController.getCources(mealTime)
+//        }
+        Log.d("widget_getCourses", courses.toString())
 
         courses?.let {
             widgetItem.courseLazyView(courses = courses!!)

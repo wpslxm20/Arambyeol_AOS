@@ -58,11 +58,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onResume() {
-        super.onResume()
-        sendLog.sendLog()
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    override fun onResume() {
+//        super.onResume()
+//        sendLog.sendLog()
+//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable

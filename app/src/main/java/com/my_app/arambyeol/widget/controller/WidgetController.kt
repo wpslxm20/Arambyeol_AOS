@@ -1,7 +1,5 @@
 package com.my_app.arambyeol.widget.controller
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -11,14 +9,13 @@ import com.my_app.arambyeol.data.*
 import com.my_app.arambyeol.data.ConstantObj.DINNER
 import com.my_app.arambyeol.data.ConstantObj.LUNCH
 import com.my_app.arambyeol.data.ConstantObj.MORNING
-import com.my_app.arambyeol.data.ConstantObj.TODAY
 import com.my_app.arambyeol.data.ConstantObj.TOMORROW
 import com.my_app.arambyeol.data.ConstantObj.TOMORROW_MORNING
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.*
 
-class WidgetController(private val context: Context) {
+class WidgetController() {
     private val mealPlanFetcher = MealPlanFetcher()
 
     fun getCurrentDate() : String {
@@ -61,11 +58,40 @@ class WidgetController(private val context: Context) {
         return ""
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getDayPlan(mealDate: String): List<List<Course>> {
-        return if (mealDate.contains(TOMORROW))
-            mealPlanFetcher.getDayPlan(context, TOMORROW)
-        else mealPlanFetcher.getDayPlan(context, TODAY)
+    suspend fun getDayPlan(context: Context, day: String): List<List<Course>> {
+        val db = AppDatabase.getDatabase(context)
+        val mealPlanDao = db.mealPlanDao()
+        val converters = Converters()
+        Log.d("getDayPlan", day)
+
+        val morningPlan = mealPlanDao.getListCourse(day, "아침")?.listCourse
+        val lunchPlan = mealPlanDao.getListCourse(day, "점심")?.listCourse
+        val dinnerPlan = mealPlanDao.getListCourse(day, "저녁")?.listCourse
+        Log.d("getDayPlan", morningPlan.toString())
+        Log.d("getDayPlan", lunchPlan.toString())
+
+        val nullCourse = Course("업데이트 예정", null)
+
+        val morningCourses = morningPlan?.let { converters.toCourseList(it) } ?: listOf(nullCourse)
+        val lunchCourses = lunchPlan?.let { converters.toCourseList(it) } ?: listOf(nullCourse)
+        val dinnerCourses = dinnerPlan?.let { converters.toCourseList(it) } ?: listOf(nullCourse)
+
+        return listOf(morningCourses, lunchCourses, dinnerCourses)
+    }
+
+    suspend fun getCourses(context: Context, day: String, time: String): List<Course> {
+        val db = AppDatabase.getDatabase(context)
+        val mealPlanDao = db.mealPlanDao()
+        val converters = Converters()
+        Log.d("widget_getCourse", day)
+        Log.d("widget_getCourses", time)
+
+        val courses = mealPlanDao.getListCourse(day, time)?.listCourse
+        Log.d("widget_getCourses", courses.toString())
+
+        val nullCourse = Course("업데이트 예정", null)
+
+        return courses?.let { converters.toCourseList(it) } ?: listOf(nullCourse)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

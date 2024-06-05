@@ -51,6 +51,9 @@
             </intent-filter>
         </receiver>
 
+<!--        <service android:name=".widget.service.WidgetUpdateService"-->
+<!--            android:exported="false"/>-->
+
     </application>
 
 

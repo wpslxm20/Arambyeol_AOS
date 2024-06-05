@@ -1,6 +1,7 @@
 package com.my_app.arambyeol.widget
 
 import android.annotation.SuppressLint
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -18,23 +19,27 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.my_app.arambyeol.R
+import com.my_app.arambyeol.data.AppDatabase
+import com.my_app.arambyeol.data.ConstantObj
 import com.my_app.arambyeol.data.Course
-import com.my_app.arambyeol.data.DayPlan
 import com.my_app.arambyeol.widget.controller.WidgetController
 import com.my_app.arambyeol.widget.view.WidgetItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class WidgetDayPlan(): GlanceAppWidget() {
 
     private val widgetItem = WidgetItem()
-    private lateinit var widgetController: WidgetController
+    private val widgetController = WidgetController()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        widgetController = WidgetController(context)
+        var day = widgetController.getMealDate()
+        if (day == "") day = ConstantObj.TODAY
+
+        val dayPlan = widgetController.getDayPlan(context, day)
+        Log.d("widget_update_getData", dayPlan.toString())
+
         provideContent {
-            MyContent(context)
+            MyContent(context, dayPlan)
         }
     }
 
@@ -42,7 +47,7 @@ class WidgetDayPlan(): GlanceAppWidget() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun MyContent(context: Context) {
+    private fun MyContent(context: Context, dayPlan: List<List<Course>>) {
         Column (
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -57,23 +62,14 @@ class WidgetDayPlan(): GlanceAppWidget() {
                 val mealDate= widgetController.getMealDate()
                 widgetItem.DateView(currentDate, mealDate)
 
-                DayPlanView(context, mealDate)
+                DayPlanView(context, mealDate, dayPlan)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    private fun DayPlanView(context: Context, mealDate: String) {
-//        widgetController = WidgetController(context)
-        var dayPlan by remember {
-            mutableStateOf<List<List<Course>>>(listOf())
-        }
-
-        LaunchedEffect(Unit) {
-            dayPlan = widgetController.getDayPlan(mealDate)
-        }
-        Log.d("widget_getDayPlan", dayPlan.toString())
+    private fun DayPlanView(context: Context, mealDate: String, dayPlan: List<List<Course>>) {
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -134,4 +130,20 @@ class WidgetDayPlan(): GlanceAppWidget() {
 class WidgetDayPlanReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget
         get() = WidgetDayPlan()
+
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        Log.d("widget", "onUpdate")
+//        val intent = Intent(context, WidgetUpdateService::class.java)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            context.startForegroundService ( intent );
+//        } else {
+//            context.startService ( intent );
+//        }
+//        ContextCompat.startForegroundService(context, intent)
+    }
 }

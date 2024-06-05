@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.my_app.arambyeol.data.AppDatabase
+import com.my_app.arambyeol.data.ConstantObj
 import com.my_app.arambyeol.data.Converters
 import com.my_app.arambyeol.data.Course
 import com.my_app.arambyeol.data.DateEnum
@@ -35,8 +36,8 @@ class MealPlanFetcher {
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, flags)
 
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 12)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.HOUR_OF_DAY, 1)
+            set(Calendar.MINUTE, 30)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
             // 현재 시간이 알람 시간을 지났다면 다음 날로 설정
@@ -81,11 +82,11 @@ class MealPlanFetcher {
 
             if (mealPlan != null) {
                 // 오늘 메뉴
-                insertDayPlan(db, mealPlan.today, DateEnum.TODAY.date)
+                insertDayPlan(db, mealPlan.today, ConstantObj.TODAY)
                 // 내일 메뉴
-                insertDayPlan(db, mealPlan.tomorrow, DateEnum.TOMORROW.date)
+                insertDayPlan(db, mealPlan.tomorrow, ConstantObj.TOMORROW)
                 // 모레 메뉴
-                insertDayPlan(db, mealPlan.theDayAfterTomorrow, DateEnum.AFTER_TOMORROW.date)
+                insertDayPlan(db, mealPlan.theDayAfterTomorrow, ConstantObj.AFTERTOMORROW)
 
                 Log.d("getDB", db.mealPlanDao().getMealPlan().toString())
             }
