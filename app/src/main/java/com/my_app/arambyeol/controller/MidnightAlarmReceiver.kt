@@ -12,9 +12,13 @@ class MidnightAlarmReceiver : BroadcastReceiver() {
         Log.d("alarmReceiver", "execute")
         if (intent != null) {
             if (intent.action == "com.my_app.arambyeol.UPDATE_MEAL_PLAN") {
-                // 여기에서 RoomDB 업데이트 로직을 실행
+
                 if (context != null) {
+                    // 여기에서 RoomDB 업데이트 로직을 실행
                     mealPlanFetcher.updateCourses(context)
+
+                    // 다음 날 알람 설정
+                    mealPlanFetcher.setMidnightAlarm(context)
                 }
             }
         }
