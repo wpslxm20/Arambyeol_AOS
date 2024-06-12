@@ -16,7 +16,6 @@ import java.time.LocalTime
 import java.util.*
 
 class WidgetController() {
-    private val mealPlanFetcher = MealPlanFetcher()
 
     fun getCurrentDate() : String {
         val sdf = SimpleDateFormat("MM월 dd일 EEEE", Locale.KOREAN)
@@ -92,6 +91,14 @@ class WidgetController() {
         val nullCourse = Course("업데이트 예정", null)
 
         return courses?.let { converters.toCourseList(it) } ?: listOf(nullCourse)
+    }
+
+    suspend fun isMealPlanNull(context: Context): Boolean {
+        val db = AppDatabase.getDatabase(context)
+        val mealPlanDao = db.mealPlanDao()
+        val mealPlan = mealPlanDao.getMealPlan()
+
+        return mealPlan == null || mealPlan.isEmpty()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
