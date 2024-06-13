@@ -45,7 +45,7 @@ class WidgetDayPlan(): GlanceAppWidget() {
         if (day == "") day = ConstantObj.TODAY
 
         val dayPlan = widgetController.getDayPlan(context, day)
-        Log.d("widget_update_getData", dayPlan.toString())
+//        Log.d("widget_update_getData", dayPlan.toString())
 
         provideContent {
             MyContent(context, dayPlan)

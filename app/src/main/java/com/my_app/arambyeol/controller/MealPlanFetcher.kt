@@ -36,8 +36,8 @@ class MealPlanFetcher {
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, flags)
 
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 17)
-            set(Calendar.MINUTE, 39)
+            set(Calendar.HOUR_OF_DAY, 1)
+            set(Calendar.MINUTE, 30)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
             // 현재 시간이 알람 시간을 지났다면 다음 날로 설정
