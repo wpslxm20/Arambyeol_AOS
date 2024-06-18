@@ -1,5 +1,6 @@
 package com.my_app.arambyeol.controller
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -22,6 +23,7 @@ import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 class MealPlanFetcher {
+    @SuppressLint("ScheduleExactAlarm")
     fun setMidnightAlarm(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, MidnightAlarmReceiver::class.java).apply {
@@ -96,17 +98,17 @@ class MealPlanFetcher {
         val converters = Converters()
         // 아침
         val morningCourse = converters.fromCourseList(dayPlan.morning)
-        if (morningCourse != null) {
+        if (morningCourse != null && dayPlan.morning.isNotEmpty()) {
             db.mealPlanDao().insertListCourse(MealPlanEntity(day = date, time = "아침", listCourse = morningCourse))
         }
         // 점심
         val lunchCourse = converters.fromCourseList(dayPlan.lunch)
-        if (lunchCourse != null) {
+        if (lunchCourse != null && dayPlan.lunch.isNotEmpty()) {
             db.mealPlanDao().insertListCourse(MealPlanEntity(day = date, time = "점심", listCourse = lunchCourse))
         }
         // 저녁
         val dinnerCourse = converters.fromCourseList(dayPlan.dinner)
-        if (dinnerCourse != null) {
+        if (dinnerCourse != null && dayPlan.dinner.isNotEmpty()) {
             db.mealPlanDao().insertListCourse(MealPlanEntity(day = date, time = "저녁", listCourse = dinnerCourse))
         }
     }
