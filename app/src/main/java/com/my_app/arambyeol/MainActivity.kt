@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.MobileAds
 import com.my_app.arambyeol.chat.data.remote.api.ChatRetrofitObj
-import com.my_app.arambyeol.chat.data.remote.api.DeviceUID
+import com.my_app.arambyeol.chat.data.remote.model.DeviceUID
 import com.my_app.arambyeol.chat.repository.UserRepository
 import com.my_app.arambyeol.chat.viewmodel.UserViewModel
 import com.my_app.arambyeol.chat.viewmodel.UserViewModelFactory
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         val userRepository = chatInterface?.let { UserRepository(it) }
         val viewModelFactory = userRepository?.let { UserViewModelFactory(it) }
         userViewModel = viewModelFactory?.let {
-            ViewModelProvider(this, it).get(UserViewModel::class.java)
+            ViewModelProvider(this, it)[UserViewModel::class.java]
         } ?: throw IllegalStateException("ViewModel initialization failed")
     }
 
