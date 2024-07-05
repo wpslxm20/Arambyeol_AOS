@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.my_app.arambyeol.base.App
 import com.my_app.arambyeol.chat.data.remote.model.DeviceUID
 import com.my_app.arambyeol.chat.data.remote.model.LoginResponse
+import com.my_app.arambyeol.chat.data.remote.model.NicknameResponse
 import com.my_app.arambyeol.chat.data.remote.model.SignUpResponse
 import com.my_app.arambyeol.chat.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -20,31 +21,22 @@ class UserViewModel (
     private val repository: UserRepository
 ) : ViewModel() {
     val tag = "UserViewModel"
-    // 여기서 live data로 관리해야 할 것은 닉네임 정도가 아닐까 싶음
-    // 토큰값은 sharedPreferences에 저장할 거니깐
+    private val _nickname = MutableLiveData<String>()
+    val nickname: LiveData<String> = _nickname
 
-    // signUpResult의 결과에 따라 로그인을 실행할 지를 정해야 하니 이렇게 하는 것이 좋을 듯
-    private val _signUpResult = MutableLiveData<SignUpResponse>()
-    val signUpResult: LiveData<SignUpResponse> = _signUpResult
-
-    // 회원가입
-    // - 회원가입 서버 요청 후 성공, 실패 결과 받기
     fun handleSignUp(deviceUID: DeviceUID) {
         val funName = "handleSignUp"
 
         viewModelScope.launch {
             val call = repository.signUp(deviceUID)
-            // 동기 호출
             call?.enqueue(object : Callback<SignUpResponse> {
                 override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                     if (response.isSuccessful) {
-                        _signUpResult.postValue(response.body())
                         Log.d(tag, "$funName success: ${response.body()}")
                         handleLogin(deviceUID)
                     } else {
                         val errorMessage = response.errorBody()?.string() ?: "Unknown error"
                         Log.d(tag, "$funName fail: $errorMessage")
-//                    // 메세지가 이미 있는 사용자라고 하면 로그인, 단순 오류이면 에러 처리
                     }
                 }
                 override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
@@ -54,9 +46,6 @@ class UserViewModel (
         }
     }
 
-    // 로그인
-    // - 회원가입 성공 시 로그인
-    // - 로그인 성공 시 토큰값 SharedPreferences에 저장
     private fun handleLogin(deviceUID: DeviceUID) {
         val funName = "handleLogin"
 
@@ -76,6 +65,8 @@ class UserViewModel (
                             val refreshToken = App.token_prefs.refreshToken
                             Log.d("accessToken", "$accessToken")
                             Log.d("refreshToken", "$refreshToken")
+
+                            loadNickname()
                         }
                     }
                     else {
@@ -93,10 +84,29 @@ class UserViewModel (
     // 닉네임 조회
     // 로그인 성공 시 토큰 값으로 닉네임 가져오기
     // 가져온 데이터 SharedPreferences에 저장
+    fun loadNickname() {
+        val funName = "loadNickname"
 
+        val call = repository.getNickname()
+        call?.enqueue(object : Callback<NicknameResponse> {
+            override fun onResponse(
+                call: Call<NicknameResponse>,
+                response: Response<NicknameResponse>
+            ) {
+                if (response.isSuccessful) {
+                    _nickname.postValue(response.body()?.data?.nickname)
+                    Log.d("$tag", "$funName success : ${response.body()}")
+                } else {
+                    val errorMessage = response.errorBody()?.string()
+                    Log.d("$tag", "$funName fail : $errorMessage")
+                }
+            }
+            override fun onFailure(call: Call<NicknameResponse>, t: Throwable) {
+                Log.e("$tag", "$funName exception: ${t.message}")
+            }
 
-
-
+        })
+    }
 
     // 토큰 재발급
     // - 토큰 만료 시에 사용자가 아직 채팅페이지에 접속되어있을 경우
