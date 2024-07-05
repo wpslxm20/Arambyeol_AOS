@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.my_app.arambyeol.base.App
 import com.my_app.arambyeol.chat.data.remote.model.DeviceUID
+import com.my_app.arambyeol.chat.data.remote.model.LoginResponse
 import com.my_app.arambyeol.chat.data.remote.model.SignUpResponse
 import com.my_app.arambyeol.chat.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -17,6 +19,7 @@ import retrofit2.Response
 class UserViewModel (
     private val repository: UserRepository
 ) : ViewModel() {
+    val tag = "UserViewModel"
     // 여기서 live data로 관리해야 할 것은 닉네임 정도가 아닐까 싶음
     // 토큰값은 sharedPreferences에 저장할 거니깐
 
@@ -27,8 +30,8 @@ class UserViewModel (
     // 회원가입
     // - 회원가입 서버 요청 후 성공, 실패 결과 받기
     fun handleSignUp(deviceUID: DeviceUID) {
-        val tag = "UserViewModel"
         val funName = "handleSignUp"
+
         viewModelScope.launch {
             val call = repository.signUp(deviceUID)
             // 동기 호출
@@ -37,7 +40,7 @@ class UserViewModel (
                     if (response.isSuccessful) {
                         _signUpResult.postValue(response.body())
                         Log.d(tag, "$funName success: ${response.body()}")
-                        //
+                        handleLogin(deviceUID)
                     } else {
                         val errorMessage = response.errorBody()?.string() ?: "Unknown error"
                         Log.d(tag, "$funName fail: $errorMessage")
@@ -45,7 +48,7 @@ class UserViewModel (
                     }
                 }
                 override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
-                    Log.e(tag, "$funName exception: ${t.message}", t)
+                    Log.e(tag, "$funName exception: ${t.message}")
                 }
             })
         }
@@ -55,14 +58,45 @@ class UserViewModel (
     // - 회원가입 성공 시 로그인
     // - 로그인 성공 시 토큰값 SharedPreferences에 저장
     private fun handleLogin(deviceUID: DeviceUID) {
+        val funName = "handleLogin"
 
+        viewModelScope.launch {
+            val call = repository.login(deviceUID)
+            call?.enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("$tag", "$funName success : ${response.body()}")
+                        val tokenData = response.body()?.data
+                        if (tokenData != null) {
+                            repository.saveToken(tokenData.accessToken, tokenData.refreshToken)
+                            val accessToken = App.token_prefs.accessToken
+                            val refreshToken = App.token_prefs.refreshToken
+                            Log.d("accessToken", "$accessToken")
+                            Log.d("refreshToken", "$refreshToken")
+                        }
+                    }
+                    else {
+                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                        Log.d("$tag", "$funName fail : $errorMessage")
+                    }
+                }
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Log.e("$tag", "$funName exception: ${t.message}")
+                }
+            })
+        }
     }
-
-
 
     // 닉네임 조회
     // 로그인 성공 시 토큰 값으로 닉네임 가져오기
     // 가져온 데이터 SharedPreferences에 저장
+
+
+
+
 
     // 토큰 재발급
     // - 토큰 만료 시에 사용자가 아직 채팅페이지에 접속되어있을 경우
