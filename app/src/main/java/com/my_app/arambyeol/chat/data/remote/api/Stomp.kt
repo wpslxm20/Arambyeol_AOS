@@ -1,21 +1,14 @@
-package com.my_app.arambyeol.chat
+package com.my_app.arambyeol.chat.data.remote.api
 
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
 import com.google.gson.Gson
+import com.my_app.arambyeol.chat.data.remote.model.ChatResponse
 import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
-
-data class ChatMessage(
-    val senderDid: String,
-    val message: String,
-    val sendTime: String
-)
 
 fun chat() {
     val logger = Logger.getLogger("Main")
@@ -91,25 +84,4 @@ fun chat() {
     })
 }
 
-// 수신 메시지의 데이터 클래스
-data class ChatResponseBody(
-    val success: Boolean,
-    val errorCode: Int,
-    val message: String,
-    val data: ChatData
-)
 
-data class ChatResponse(
-    val headers: Map<String, String>,
-    val body: ChatResponseBody?,
-    val statusCodeValue: Int,
-    val statusCode: String
-)
-
-data class ChatData(
-    val senderDid: String,
-    val senderNickname: String,
-    val chatId: String,
-    val message: String,
-    val sendTime: String
-)
