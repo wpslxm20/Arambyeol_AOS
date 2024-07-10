@@ -13,22 +13,6 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Provides
-    @Singleton
-    fun provideChatInterface(): ChatInterface {
-        return ChatRetrofitObj.retrofitService ?: throw IllegalStateException("Retrofit not initialized")
-    }
-
-    @Provides
-    @Singleton
-    fun provideChatRepository(): ChatRepository {
-        val service = provideChatInterface()
-        return ChatRepository(service)
-    }
-}
 class ChatRepository @Inject constructor(private val service: ChatInterface) {
     fun getChatList(
         startDate: LocalDateTime, page: Int, size:Int

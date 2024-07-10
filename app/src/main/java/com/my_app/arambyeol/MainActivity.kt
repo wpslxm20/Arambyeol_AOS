@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.MobileAds
+import com.my_app.arambyeol.base.App
 import com.my_app.arambyeol.chat.data.remote.api.ChatRetrofitObj
 import com.my_app.arambyeol.chat.data.remote.model.DeviceUID
 import com.my_app.arambyeol.chat.repository.ChatRepository
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         val deviceUID = getDeviceUID()
         Log.d("getDeviceId", deviceUID.toString())
+        App.token_prefs.deviceUID = deviceUID.deviceUID
 
         initializeMobileAds()
         setMidnightAlarm()

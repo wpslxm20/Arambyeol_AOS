@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.my_app.arambyeol.chat.view.ChatView
-import com.my_app.arambyeol.chat.view.ChatViewRoot
 import com.my_app.arambyeol.view.MainView
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -23,7 +22,7 @@ fun setNavigationGraph(
             MainView(navController, context = context)
         }
         composable(route = NavItem.Chat.route) {
-            ChatViewRoot(navController)
+            ChatView(navController)
         }
     }
 }
