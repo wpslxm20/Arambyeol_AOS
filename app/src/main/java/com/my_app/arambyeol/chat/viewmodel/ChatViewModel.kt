@@ -4,12 +4,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.my_app.arambyeol.base.App
@@ -45,7 +41,7 @@ class ChatViewModel @Inject constructor(
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        chatListState = chatListState.copy(chatList = it.data)
+                        chatListState = chatListState.copy(chatList = it.data.reversed().toMutableList())
                         Log.d(tag, "$funName success: $it")
                     } ?: run {
                         Log.d(tag, "$funName fail: Empty response body")
@@ -70,9 +66,9 @@ class ChatViewModel @Inject constructor(
     fun shouldShowDateLabel(index: Int, chatList: List<ChatData>): Boolean {
         val currentDate = formatDateString(chatList[index].sendTime)
 
-        return if (index < chatList.size - 1) {
-            val nextDate = formatDateString(chatList[index + 1].sendTime)
-            currentDate != nextDate
+        return if (index > 0) {
+            val prevDate = formatDateString(chatList[index - 1].sendTime)
+            currentDate != prevDate
         } else {
             true
         }

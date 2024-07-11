@@ -45,20 +45,19 @@ fun ChatView(
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        reverseLayout = true
+        modifier = Modifier.fillMaxSize()
     ) {
         itemsIndexed(state.chatList) { index, item ->
             var isFromUser by remember { mutableStateOf(false) }
+
+            if (viewModel.shouldShowDateLabel(index, state.chatList)) {
+                DateTextBox(date = viewModel.formatDateString(item.sendTime))
+            }
 
             LaunchedEffect(item.senderDid) {
                 isFromUser = viewModel.isMessageFromUser(item.senderDid)
             }
             ChatItem(chatData = item, isFromUser = isFromUser)
-
-            if (viewModel.shouldShowDateLabel(index, state.chatList)) {
-                DateTextBox(date = viewModel.formatDateString(item.sendTime))
-            }
         }
     }
 }
