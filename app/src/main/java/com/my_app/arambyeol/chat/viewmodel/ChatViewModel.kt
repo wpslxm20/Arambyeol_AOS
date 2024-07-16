@@ -1,73 +1,78 @@
 package com.my_app.arambyeol.chat.viewmodel
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.compose.LazyPagingItems
 import com.my_app.arambyeol.base.App
+import com.my_app.arambyeol.chat.data.remote.api.ChatInterface
 import com.my_app.arambyeol.chat.data.remote.model.ChatData
-import com.my_app.arambyeol.chat.data.remote.model.ChatListResponse
+import com.my_app.arambyeol.chat.repository.ChatPagingSource
 import com.my_app.arambyeol.chat.repository.ChatRepository
 import com.my_app.arambyeol.chat.viewmodel.state.ChatListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val repository: ChatRepository
 ) : ViewModel() {
     val tag = "ChatViewModel"
-    var chatListState by mutableStateOf(ChatListState())
-        private set
+//    private val _chatList = MutableStateFlow<PagingData<ChatData>>(PagingData.empty())
+//    val chatList: Flow<PagingData<ChatData>> = _chatList
+    var chatList: Flow<PagingData<ChatData>>
 
-    fun getChatList(startDate: LocalDateTime, page:Int, size:Int) {
-        val funName = "getChatList"
-        val call = repository.getChatList(startDate, page, size)
-
-        call.enqueue(object : Callback<ChatListResponse> {
-            override fun onResponse(
-                call: Call<ChatListResponse>,
-                response: Response<ChatListResponse>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        chatListState = chatListState.copy(chatList = it.data.reversed().toMutableList())
-                        Log.d(tag, "$funName success: $it")
-                    } ?: run {
-                        Log.d(tag, "$funName fail: Empty response body")
-                    }
-                }
-                else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                    Log.d(tag, "$funName fail: $errorMessage")
-                }
-            }
-            override fun onFailure(call: Call<ChatListResponse>, t: Throwable) {
-                Log.e(tag, "$funName exception: ${t.message}")
-            }
-        })
+    init {
+        val startDate = LocalDateTime.now()
+        val token = App.token_prefs.accessToken ?: ""
+        chatList = repository.getChatList(token, startDate)
     }
+
+//    private fun getChatList(startDate: LocalDateTime, size: Int) {
+//        viewModelScope.launch {
+//            try {
+//                repository.getChatList(App.token_prefs.accessToken!!, startDate, size)
+//                    .cachedIn(viewModelScope)
+//                    .collect { pagingData ->
+//                        _chatList.emit(pagingData)
+//                    }
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
 
     fun isMessageFromUser(senderId: String): Boolean {
         return senderId == App.token_prefs.deviceUID
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun shouldShowDateLabel(index: Int, chatList: List<ChatData>): Boolean {
-        val currentDate = formatDateString(chatList[index].sendTime)
+    fun shouldShowDateLabel(index: Int, chatList: LazyPagingItems<ChatData>): Boolean {
+        val currentDate = formatDateString(chatList[index]!!.sendTime)
 
         return if (index > 0) {
-            val prevDate = formatDateString(chatList[index - 1].sendTime)
+            val prevDate = formatDateString(chatList[index - 1]!!.sendTime)
             currentDate != prevDate
         } else {
             true
@@ -84,6 +89,7 @@ class ChatViewModel @Inject constructor(
 }
 
 class ChatViewModelFactory(private val repository: ChatRepository) : ViewModelProvider.Factory {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

@@ -24,6 +24,7 @@ class UserViewModel (
     private val _nickname = MutableLiveData<String>()
     val nickname: LiveData<String> = _nickname
 
+
     fun handleSignUp(deviceUID: DeviceUID) {
         val funName = "handleSignUp"
 

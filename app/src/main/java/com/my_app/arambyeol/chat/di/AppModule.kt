@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.Settings
 import com.my_app.arambyeol.chat.data.remote.api.ChatInterface
 import com.my_app.arambyeol.chat.data.remote.api.ChatRetrofitObj
+import com.my_app.arambyeol.chat.repository.ChatRemoteDataSource
 import com.my_app.arambyeol.chat.repository.ChatRepository
 import dagger.Module
 import dagger.Provides
@@ -20,6 +21,13 @@ object AppModule {
     fun provideChatInterface(): ChatInterface {
         return ChatRetrofitObj.retrofitService ?: throw IllegalStateException("Retrofit not initialized")
     }
+
+//    @Provides
+//    @Singleton
+//    fun provideDataSource(): ChatRemoteDataSource {
+//        val service = provideChatInterface()
+//        return ChatRemoteDataSource(service)
+//    }
 
     @Provides
     @Singleton

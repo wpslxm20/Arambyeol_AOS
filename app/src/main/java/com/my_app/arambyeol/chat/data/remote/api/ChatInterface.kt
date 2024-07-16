@@ -7,6 +7,7 @@ import com.my_app.arambyeol.chat.data.remote.model.LoginResponse
 import com.my_app.arambyeol.chat.data.remote.model.NicknameResponse
 import com.my_app.arambyeol.chat.data.remote.model.SignUpResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -30,10 +31,10 @@ interface ChatInterface {
     ): Call<NicknameResponse>
 
     @GET("/chatList")
-    fun getChatList(
+    suspend fun getChatList(
         @Header("Authorization") accessToken: String,
         @Query("start") startDate: LocalDateTime,
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): Call<ChatListResponse>
+    ): ChatListResponse
 }
