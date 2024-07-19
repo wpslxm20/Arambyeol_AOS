@@ -53,8 +53,9 @@
   <img src="https://github.com/user-attachments/assets/3ce1430c-4dd8-42e4-866b-fe70a6e950bc" width="400rem"/>
 
 - 채팅 기능  
-  **MVVM 패턴 사용**
+  **MVVM 패턴 사용**  
+  - ViewModel을 역할에 따라 유저를 관리하는 UserViewModel과 채팅을 관리하는 ChatViewModel로 분리하였습니다. ViewModel이 분리됨에 따라 하나의 ViewModel의 무게를 줄이고 유지보수에 용이하도록 작성하였습니다.
+  <img src="https://github.com/user-attachments/assets/8c4d88ef-b49a-45b1-bda3-f0148b1fd759"/>
   
-  https://github.com/user-attachments/assets/8c4d88ef-b49a-45b1-bda3-f0148b1fd759
 
 
