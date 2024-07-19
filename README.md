@@ -32,7 +32,7 @@
   - 앱이 실행될 때, 로컬 데이터베이스(RoomDB)에 저장된 식단 정보가 존재하지 않을 경우, 인터넷 연결을 확인하고 연결되어 있으면 네트워크 요청을 통해 식단정보를 받아옵니다.
   - 매일 1시 30분에 알람이 작동하도록 AlarmManager를 설정합니다. 알람이 실행되면 RoomDB의 식단 정보를 삭제하고, 새로운 식단 정보로 업데이트합니다.
   - View에서는 RoomDB에 저장되어 있는 식단 정보를 로드합니다.
-  <img src="https://github.com/user-attachments/assets/5c7aac32-ac90-459b-89c9-8d99736c05c4"/>
+  <img src="https://github.com/user-attachments/assets/cdbf2147-9275-4e03-8451-5529cc06fcfc"/>
   
 - 위젯
   - 앱의 위젯은 30분 간격으로 업데이트되며, 현재 시간을 기준으로 사용자가 확인해야 할 식단 정보를 뷰에 표시합니다.
